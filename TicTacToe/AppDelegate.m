@@ -7,16 +7,22 @@
 //
 
 #import "AppDelegate.h"
+#import "Game.h"
+#import "GameViewController.h"
 
 @interface AppDelegate ()
 
+@property (nonatomic, strong) Game *game;
 @end
 
 @implementation AppDelegate
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
     // Override point for customization after application launch.
+    [self loadGame];
+    
     return YES;
 }
 
@@ -47,5 +53,12 @@
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
+- (void)loadGame {
+    GameViewController *view = (GameViewController *) [[self window] rootViewController];
+    _game = [[Game alloc] initWithGameView:view];
+    [view setGame:_game];
+    
+    [_game startNewGame];
+}
 
 @end

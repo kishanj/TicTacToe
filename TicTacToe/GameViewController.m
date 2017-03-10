@@ -1,14 +1,15 @@
 //
-//  ViewController.m
+//  GameViewController.m
 //  TicTacToe
 //
 //  Created by Kishan Jayaraman on 3/3/17.
 //  Copyright © 2017 Kishan Jayaraman. All rights reserved.
 //
 
-#import "ViewController.h"
+#import "GameViewController.h"
+#import "Game.h"
 
-@interface ViewController ()
+@interface GameViewController ()
 
 @property (strong, nonatomic) UIImageView *settingsButton;
 @property (strong, nonatomic) UIButton *backButton;
@@ -16,24 +17,17 @@
 @property (strong, nonatomic) UILabel *player1ScoreLabel;
 @property (strong, nonatomic) UILabel *player2ScoreLabel;
 
-@property (strong, nonatomic) UIImageView *squareA1;
-@property (strong, nonatomic) UIImageView *squareA2;
-@property (strong, nonatomic) UIImageView *squareA3;
-@property (strong, nonatomic) UIImageView *squareB1;
-@property (strong, nonatomic) UIImageView *squareB2;
-@property (strong, nonatomic) UIImageView *squareB3;
-@property (strong, nonatomic) UIImageView *squareC1;
-@property (strong, nonatomic) UIImageView *squareC2;
-@property (strong, nonatomic) UIImageView *squareC3;
+@property (strong, nonatomic) NSMutableArray *tiles;
+@property (strong, nonatomic) Player *turn;
 
-@property (strong, nonatomic) UIImage *XImage;
-@property (strong, nonatomic) UIColor *XImageColor;
-@property (strong, nonatomic) UIImage *OImage;
-@property (strong, nonatomic) UIColor *OImageColor;
+@property (strong, nonatomic) UIImage *player1Image;
+@property (strong, nonatomic) UIColor *player1Color;
+@property (strong, nonatomic) UIImage *player2Image;
+@property (strong, nonatomic) UIColor *player2Color;
 
 @end
 
-@implementation ViewController
+@implementation GameViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -99,32 +93,32 @@
                                          usableScreenWidth,
                                          commandsHeight)];
     
-    // Game Grid
-    CGFloat gridWidth = usableScreenWidth - 4 * xSegment;
-    CGFloat gridHeight = gridWidth;
-    CGFloat gridXTop = screenWidth/2 - gridWidth/2;
-    CGFloat gridYTop = commandsYBottom + 2 * ySegment;
+    // Game Board
+    CGFloat boardWidth = usableScreenWidth - 4 * xSegment;
+    CGFloat boardHeight = boardWidth;
+    CGFloat boardXTop = screenWidth/2 - boardWidth/2;
+    CGFloat boardYTop = commandsYBottom + 2 * ySegment;
     
-    CGRect gridFrame = CGRectMake(gridXTop, gridYTop, gridWidth, gridHeight);
-    [self loadGameGridInFrame:gridFrame];
-    [self loadSquaresInGrid:gridFrame];
+    CGRect boardFrame = CGRectMake(boardXTop, boardYTop, boardWidth, boardHeight);
+    [self loadGameBoardInFrame:boardFrame];
+    [self loadTilesInBoard:boardFrame];
 }
 
 - (void)loadImages {
-    _XImage = [UIImage imageNamed:@"Hearts"];
-    _XImage = [_XImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    _XImageColor = [UIColor blueColor];
+    Player *player1 = [_game player1];
+    _player1Image = [player1 image];
+    _player1Color = [player1 color];
     
-    _OImage = [UIImage imageNamed:@"Diamonds"];
-    _OImage = [_OImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    _OImageColor = [UIColor redColor];
+    Player *player2 = [_game player2];
+    _player2Image = [player2 image];
+    _player2Color = [player2 color];
 }
 
 - (void)loadSettingsButtonInFrame:(CGRect)frame {
     _settingsButton = [[UIImageView alloc] initWithFrame:CGRectMake(frame.origin.x, frame.origin.y, frame.size.width, frame.size.height)];
     [_settingsButton setImage:[UIImage imageNamed:@"Settings.png"]];
     
-    UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSettingsTap:)];
+    UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(settingsDidTap:)];
     tapGestureRecognizer.delegate = self;
     
     [_settingsButton setUserInteractionEnabled:YES];
@@ -133,7 +127,7 @@
     [self.view addSubview:_settingsButton];
 }
 
-- (void)handleSettingsTap:(UITapGestureRecognizer *)sender
+- (void)settingsDidTap:(UITapGestureRecognizer *)sender
 {
     if (sender.state == UIGestureRecognizerStateEnded)
     {
@@ -157,22 +151,22 @@
     [self.view addSubview:scoreLabel];
     
     CGPoint player1IconCenter = CGPointMake(frame.origin.x + frame.size.width/4, frame.origin.y + frame.size.height/4);
-    UIImageView *player1Image = [[UIImageView alloc] initWithFrame:CGRectMake(player1IconCenter.x - playerObjectSize.width/2,
+    UIImageView *player1ImageView = [[UIImageView alloc] initWithFrame:CGRectMake(player1IconCenter.x - playerObjectSize.width/2,
                                                                               player1IconCenter.y - playerObjectSize.height/2,
                                                                               playerObjectSize.width,
                                                                               playerObjectSize.height)];
-    [player1Image setImage:_OImage];
-    [player1Image setTintColor:_OImageColor];
-    [self.view addSubview:player1Image];
+    [player1ImageView setImage:_player1Image];
+    [player1ImageView setTintColor:_player1Color];
+    [self.view addSubview:player1ImageView];
     
     CGPoint player2IconCenter = CGPointMake(frame.origin.x + frame.size.width*3/4, frame.origin.y + frame.size.height/4);
-    UIImageView *player2Image = [[UIImageView alloc] initWithFrame:CGRectMake(player2IconCenter.x - playerObjectSize.width/2,
+    UIImageView *player2ImageView = [[UIImageView alloc] initWithFrame:CGRectMake(player2IconCenter.x - playerObjectSize.width/2,
                                                                               player2IconCenter.y - playerObjectSize.height/2,
                                                                               playerObjectSize.width,
                                                                               playerObjectSize.height)];
-    [player2Image setImage:_XImage];
-    [player2Image setTintColor:_XImageColor];
-    [self.view addSubview:player2Image];
+    [player2ImageView setImage:_player2Image];
+    [player2ImageView setTintColor:_player2Color];
+    [self.view addSubview:player2ImageView];
     
     CGPoint player1ScoreCenter = CGPointMake(player1IconCenter.x, player1IconCenter.y + frame.size.height/2);
     _player1ScoreLabel = [[UILabel alloc] initWithFrame:CGRectMake(player1ScoreCenter.x - playerObjectSize.width/2,
@@ -202,7 +196,7 @@
     [_backButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [_backButton setContentVerticalAlignment:UIControlContentVerticalAlignmentCenter];
     [_backButton setContentHorizontalAlignment:(UIControlContentHorizontalAlignmentCenter)];
-    [_backButton addTarget:self action:@selector(backButtonTapped:) forControlEvents:UIControlEventTouchDown];
+    [_backButton addTarget:self action:@selector(backButtonDidTap:) forControlEvents:UIControlEventTouchDown];
     [self.view addSubview:_backButton];
     
     
@@ -210,17 +204,16 @@
                                                                     frame.origin.y + frame.size.height/2,
                                                                     frame.size.width,
                                                                     frame.size.height/2)];
-    [_commandLabel setText:@"It's YOUR turn"];
     [_commandLabel setTextColor:[UIColor blackColor]];
     [_commandLabel setTextAlignment:NSTextAlignmentCenter];
     [self.view addSubview:_commandLabel];
 }
 
-- (void)backButtonTapped:(id)sender {
+- (void)backButtonDidTap:(id)sender {
     
 }
 
-- (void)loadGameGridInFrame:(CGRect)frame {
+- (void)loadGameBoardInFrame:(CGRect)frame {
     UIView *verticalLine1 = [[UIView alloc] initWithFrame:CGRectMake(frame.origin.x + frame.size.width/3, frame.origin.y, 1, frame.size.height)];
     [self setLineProperties:verticalLine1];
     
@@ -239,85 +232,116 @@
     [self.view addSubview:line];
 }
 
-- (void)loadSquaresInGrid:(CGRect)grid {
-    CGFloat imageToSquareRatio = 0.5;
-    CGFloat imageSize = grid.size.width/3 * imageToSquareRatio;
+- (void)loadTilesInBoard:(CGRect)board {
     
-    _squareA1 = [[UIImageView alloc] initWithFrame:CGRectMake(grid.origin.x + grid.size.width/6 - imageSize/2,
-                                                              grid.origin.y + grid.size.height/6 - imageSize/2,
-                                                              imageSize,
-                                                              imageSize)];
-    [self setImageProperties:_squareA1 withTag:0];
+    const CGFloat imageToTileRatio = 0.5;
+    CGFloat imageSize = board.size.width/3 * imageToTileRatio;
+
+    const NSUInteger numTiles = [GameBoard tilesOnBoard];
+    _tiles = [[NSMutableArray alloc] initWithCapacity:numTiles];
     
-    _squareA2 = [[UIImageView alloc] initWithFrame:CGRectMake(grid.origin.x + grid.size.width/2 - imageSize/2,
-                                                              grid.origin.y + grid.size.height/6 - imageSize/2,
-                                                              imageSize,
-                                                              imageSize)];
-    [self setImageProperties:_squareA2 withTag:1];
-    
-    _squareA3 = [[UIImageView alloc] initWithFrame:CGRectMake(grid.origin.x + grid.size.width*5/6 - imageSize/2,
-                                                              grid.origin.y + grid.size.height/6 - imageSize/2,
-                                                              imageSize,
-                                                              imageSize)];
-    [self setImageProperties:_squareA3 withTag:2];
-    
-    _squareB1 = [[UIImageView alloc] initWithFrame:CGRectMake(grid.origin.x + grid.size.width/6 - imageSize/2,
-                                                              grid.origin.y + grid.size.height/2 - imageSize/2,
-                                                              imageSize,
-                                                              imageSize)];
-    [self setImageProperties:_squareB1 withTag:3];
-    
-    _squareB2 = [[UIImageView alloc] initWithFrame:CGRectMake(grid.origin.x + grid.size.width/2 - imageSize/2,
-                                                              grid.origin.y + grid.size.height/2 - imageSize/2,
-                                                              imageSize,
-                                                              imageSize)];
-    [self setImageProperties:_squareB2 withTag:4];
-    
-    _squareB3 = [[UIImageView alloc] initWithFrame:CGRectMake(grid.origin.x + grid.size.width*5/6 - imageSize/2,
-                                                              grid.origin.y + grid.size.height/2 - imageSize/2,
-                                                              imageSize,
-                                                              imageSize)];
-    [self setImageProperties:_squareB3 withTag:5];
-    
-    _squareC1 = [[UIImageView alloc] initWithFrame:CGRectMake(grid.origin.x + grid.size.width/6 - imageSize/2,
-                                                              grid.origin.y + grid.size.height*5/6 - imageSize/2,
-                                                              imageSize,
-                                                              imageSize)];
-    [self setImageProperties:_squareC1 withTag:6];
-    
-    _squareC2 = [[UIImageView alloc] initWithFrame:CGRectMake(grid.origin.x + grid.size.width/2 - imageSize/2,
-                                                              grid.origin.y + grid.size.height*5/6 - imageSize/2,
-                                                              imageSize,
-                                                              imageSize)];
-    [self setImageProperties:_squareC2 withTag:7];
-    
-    _squareC3 = [[UIImageView alloc] initWithFrame:CGRectMake(grid.origin.x + grid.size.width*5/6 - imageSize/2,
-                                                              grid.origin.y + grid.size.height*5/6 - imageSize/2,
-                                                              imageSize,
-                                                              imageSize)];
-    [self setImageProperties:_squareC3 withTag:8];
+    for (NSInteger i=0; i<numTiles; i++) {
+        
+        NSUInteger row = i/3;
+        NSUInteger column = i%3;
+        
+        CGFloat xPos = 0;
+        CGFloat yPos = 0;
+        
+        switch (row) {
+            case 0:
+                yPos = board.origin.y + board.size.height/6 - imageSize/2;
+                break;
+                
+            case 1:
+                yPos = board.origin.y + board.size.height/2 - imageSize/2;
+                break;
+                
+            case 2:
+                yPos = board.origin.y + board.size.height*5/6 - imageSize/2;
+                break;
+        }
+
+        switch (column) {
+            case 0:
+                xPos = board.origin.x + board.size.width/6 - imageSize/2;
+                break;
+                
+            case 1:
+                xPos = board.origin.x + board.size.width/2 - imageSize/2;
+                break;
+                
+            case 2:
+                xPos = board.origin.x + board.size.width*5/6 - imageSize/2;
+                break;
+        }
+        
+        _tiles[i] = [[UIImageView alloc] initWithFrame:CGRectMake(xPos,
+                                                                  yPos,
+                                                                  imageSize,
+                                                                  imageSize)];
+        [self setImageProperties:_tiles[i] withTag:i];
+    }
 }
 
-- (void)setImageProperties:(UIImageView *)square withTag:(NSInteger)tag {
-    [square setImage:_OImage];
-    [square setTintColor:_OImageColor];
-    [self.view addSubview:square];
+- (void)setImageProperties:(UIImageView *)tile withTag:(NSInteger)tag {
+    [self.view addSubview:tile];
     
-    UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleGridSquareTap:)];
+    UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(boardTileDidTap:)];
     tapGestureRecognizer.delegate = self;
     
-    [square setUserInteractionEnabled:YES];
-    [square addGestureRecognizer:tapGestureRecognizer];
+    [tile setUserInteractionEnabled:YES];
+    [tile addGestureRecognizer:tapGestureRecognizer];
     
-    [square setTag:tag];
+    [tile setTag:tag];
 }
 
-- (void)handleGridSquareTap:(UITapGestureRecognizer *)sender
+- (void)boardTileDidTap:(UITapGestureRecognizer *)sender
 {
     if (sender.state == UIGestureRecognizerStateEnded)
     {
-        
+        [_game player:_turn didMove:[[sender view] tag]];
     }
+}
+
+#pragma mark - GameViewInterface implementation
+
+- (void)resetGame {
+    for (NSInteger i=0; i<_tiles.count; i++) {
+        UIImageView *tile = _tiles[i];
+        [tile setImage:nil];
+        [tile setUserInteractionEnabled:YES];
+    }
+}
+
+- (void)assignPlayer:(nullable Player *)player toTile:(NSUInteger)tag {
+    if (tag < _tiles.count) {
+        UIImageView *tile = _tiles[tag];
+        [tile setImage:[player image]];
+        [tile setTintColor:[player color]];
+        if (player) {
+            [tile setUserInteractionEnabled:NO];
+        }
+        else {
+            [tile setUserInteractionEnabled:YES];
+        }
+    }
+}
+
+- (void)assignTurn:(nullable Player *)player {
+    _turn = player;
+}
+
+- (void)resetStats {
+    [_player1ScoreLabel setText:0];
+    [_player2ScoreLabel setText:0];
+}
+
+- (void)displayCommand:(nullable NSString *)command {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [_commandLabel setText:command];
+    });
+    
 }
 
 @end

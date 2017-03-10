@@ -7,9 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		987415621E6F7C8C006EB120 /* Player.m in Sources */ = {isa = PBXBuildFile; fileRef = 987415611E6F7C8C006EB120 /* Player.m */; };
+		987415641E6F838E006EB120 /* Game.m in Sources */ = {isa = PBXBuildFile; fileRef = 987415631E6F838E006EB120 /* Game.m */; };
+		987415691E70835A006EB120 /* GameBoard.m in Sources */ = {isa = PBXBuildFile; fileRef = 987415681E70835A006EB120 /* GameBoard.m */; };
+		9874156B1E70C4F7006EB120 /* GameModeManual.m in Sources */ = {isa = PBXBuildFile; fileRef = 9874156A1E70C4F7006EB120 /* GameModeManual.m */; };
+		9874156E1E70CEC6006EB120 /* GameMode.m in Sources */ = {isa = PBXBuildFile; fileRef = 9874156D1E70CEC6006EB120 /* GameMode.m */; };
 		98D3C2231E69FBCE00BAE214 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 98D3C2221E69FBCE00BAE214 /* main.m */; };
 		98D3C2261E69FBCE00BAE214 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 98D3C2251E69FBCE00BAE214 /* AppDelegate.m */; };
-		98D3C2291E69FBCE00BAE214 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 98D3C2281E69FBCE00BAE214 /* ViewController.m */; };
+		98D3C2291E69FBCE00BAE214 /* GameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 98D3C2281E69FBCE00BAE214 /* GameViewController.m */; };
 		98D3C22C1E69FBCE00BAE214 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 98D3C22A1E69FBCE00BAE214 /* Main.storyboard */; };
 		98D3C22E1E69FBCE00BAE214 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 98D3C22D1E69FBCE00BAE214 /* Assets.xcassets */; };
 		98D3C2311E69FBCE00BAE214 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 98D3C22F1E69FBCE00BAE214 /* LaunchScreen.storyboard */; };
@@ -35,12 +40,23 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		987415601E6F7A04006EB120 /* Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Player.h; sourceTree = "<group>"; };
+		987415611E6F7C8C006EB120 /* Player.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Player.m; sourceTree = "<group>"; };
+		987415631E6F838E006EB120 /* Game.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Game.m; sourceTree = "<group>"; };
+		987415651E6F83A5006EB120 /* Game.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Game.h; sourceTree = "<group>"; };
+		987415661E707ECA006EB120 /* GameModeManual.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameModeManual.h; sourceTree = "<group>"; };
+		987415671E70806E006EB120 /* GameBoard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameBoard.h; sourceTree = "<group>"; };
+		987415681E70835A006EB120 /* GameBoard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameBoard.m; sourceTree = "<group>"; };
+		9874156A1E70C4F7006EB120 /* GameModeManual.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameModeManual.m; sourceTree = "<group>"; };
+		9874156C1E70CE9F006EB120 /* GameMode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameMode.h; sourceTree = "<group>"; };
+		9874156D1E70CEC6006EB120 /* GameMode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameMode.m; sourceTree = "<group>"; };
+		987415761E71D3E8006EB120 /* GameModeInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameModeInterface.h; sourceTree = "<group>"; };
 		98D3C21E1E69FBCE00BAE214 /* TicTacToe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TicTacToe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		98D3C2221E69FBCE00BAE214 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		98D3C2241E69FBCE00BAE214 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		98D3C2251E69FBCE00BAE214 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		98D3C2271E69FBCE00BAE214 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		98D3C2281E69FBCE00BAE214 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		98D3C2271E69FBCE00BAE214 /* GameViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameViewController.h; sourceTree = "<group>"; };
+		98D3C2281E69FBCE00BAE214 /* GameViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GameViewController.m; sourceTree = "<group>"; };
 		98D3C22B1E69FBCE00BAE214 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		98D3C22D1E69FBCE00BAE214 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		98D3C2301E69FBCE00BAE214 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -103,8 +119,19 @@
 			children = (
 				98D3C2241E69FBCE00BAE214 /* AppDelegate.h */,
 				98D3C2251E69FBCE00BAE214 /* AppDelegate.m */,
-				98D3C2271E69FBCE00BAE214 /* ViewController.h */,
-				98D3C2281E69FBCE00BAE214 /* ViewController.m */,
+				98D3C2271E69FBCE00BAE214 /* GameViewController.h */,
+				98D3C2281E69FBCE00BAE214 /* GameViewController.m */,
+				987415601E6F7A04006EB120 /* Player.h */,
+				987415611E6F7C8C006EB120 /* Player.m */,
+				987415651E6F83A5006EB120 /* Game.h */,
+				987415631E6F838E006EB120 /* Game.m */,
+				987415761E71D3E8006EB120 /* GameModeInterface.h */,
+				9874156C1E70CE9F006EB120 /* GameMode.h */,
+				9874156D1E70CEC6006EB120 /* GameMode.m */,
+				987415661E707ECA006EB120 /* GameModeManual.h */,
+				9874156A1E70C4F7006EB120 /* GameModeManual.m */,
+				987415671E70806E006EB120 /* GameBoard.h */,
+				987415681E70835A006EB120 /* GameBoard.m */,
 				98D3C22A1E69FBCE00BAE214 /* Main.storyboard */,
 				98D3C22D1E69FBCE00BAE214 /* Assets.xcassets */,
 				98D3C22F1E69FBCE00BAE214 /* LaunchScreen.storyboard */,
@@ -273,8 +300,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				98D3C2291E69FBCE00BAE214 /* ViewController.m in Sources */,
+				987415641E6F838E006EB120 /* Game.m in Sources */,
+				987415621E6F7C8C006EB120 /* Player.m in Sources */,
+				9874156B1E70C4F7006EB120 /* GameModeManual.m in Sources */,
+				98D3C2291E69FBCE00BAE214 /* GameViewController.m in Sources */,
+				9874156E1E70CEC6006EB120 /* GameMode.m in Sources */,
 				98D3C2261E69FBCE00BAE214 /* AppDelegate.m in Sources */,
+				987415691E70835A006EB120 /* GameBoard.m in Sources */,
 				98D3C2231E69FBCE00BAE214 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -507,6 +539,7 @@
 				98D3C24D1E69FBCE00BAE214 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		98D3C24E1E69FBCE00BAE214 /* Build configuration list for PBXNativeTarget "TicTacToeTests" */ = {
 			isa = XCConfigurationList;
@@ -515,6 +548,7 @@
 				98D3C2501E69FBCE00BAE214 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		98D3C2511E69FBCE00BAE214 /* Build configuration list for PBXNativeTarget "TicTacToeUITests" */ = {
 			isa = XCConfigurationList;
@@ -523,6 +557,7 @@
 				98D3C2531E69FBCE00BAE214 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
