@@ -16,10 +16,10 @@
 @property (weak, nonatomic, nullable) Game *game;
 
 - (void)resetGame;
-- (void)assignPlayer:(nullable Player *)player toTile:(NSUInteger)tag;
-- (void)assignTurn:(nullable Player *)player;
 - (void)resetStats;
-- (void)displayCommand:(nullable NSString *)command;
+- (void)assignTile:(NSUInteger)tag toPlayer:(nullable Player *)player;
+- (void)assignTurn:(nullable Player *)command;
+- (void)assignWinner:(nullable Player *)winner;
 
 @end
 

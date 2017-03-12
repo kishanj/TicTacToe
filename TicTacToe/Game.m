@@ -41,31 +41,35 @@
 - (void)startNewGame {
     _board = [[GameBoard alloc] initGameWithPlayerNone:_playerNone andPlayer1:_player1 andPlayer2:_player2];
     Player *player = [_mode turn];
-    [_gameView assignTurn:player];
     NSUInteger tile = [_mode bestMoveForPlayer:player onGameBoard:_board];
     if (tile == NSUIntegerMax) {
-        [_gameView displayCommand:[NSString stringWithFormat:@"It is %@'s turn", [player name]]];
+        [_gameView assignTurn:player];
     }
     else {
-        [_gameView assignPlayer:player toTile:tile];
-        
+        [_gameView assignTile:tile toPlayer:player];
+        [_gameView assignTurn:[self nextPlayer:player]];
     }
     
 }
 
 - (void)player:(Player *)player didMove:(NSUInteger)pos {
     if ([_board makeMoveByPlayer:player move:pos]) {
-        [_gameView assignPlayer:player toTile:pos];
-        Player *nextPlayer;
-        if (player == _player1) {
-            nextPlayer = _player2;
+        [_gameView assignTile:pos toPlayer:player];
+        if ([_board isGameOver]) {
+            [_gameView assignWinner:[_board whoWonGame]];
         }
         else {
-            nextPlayer = _player1;
+            [_gameView assignTurn:[self nextPlayer:player]];
         }
-        
-        [_gameView assignTurn:nextPlayer];
-        [_gameView displayCommand:[NSString stringWithFormat:@"It is %@'s turn", [nextPlayer name]]];
+    }
+}
+
+- (Player *)nextPlayer:(Player *)currentPlayer {
+    if (currentPlayer == _player1) {
+        return _player2;
+    }
+    else {
+        return _player1;
     }
 }
 
