@@ -13,6 +13,7 @@
 
 @property (strong, nonatomic) UIImageView *settingsButton;
 @property (strong, nonatomic) UIButton *backButton;
+@property (strong, nonatomic) UIButton *nextGameButton;
 @property (strong, nonatomic) UILabel *commandLabel;
 @property (strong, nonatomic) UILabel *player1ScoreLabel;
 @property (strong, nonatomic) UILabel *player2ScoreLabel;
@@ -87,7 +88,7 @@
     
     // Commands
     CGFloat commandsYTop = scoreboardYBottom + ySegment;
-    CGFloat commandsHeight = 2 * ySegment;
+    CGFloat commandsHeight = 3 * ySegment;
     CGFloat commandsYBottom = commandsYTop + commandsHeight;
     [self loadCommandsInFrame:CGRectMake(topLeftCorner.x,
                                          commandsYTop,
@@ -192,13 +193,27 @@
 }
 
 - (void)loadCommandsInFrame:(CGRect)frame {
-    _backButton = [[UIButton alloc] initWithFrame:CGRectMake(frame.origin.x, frame.origin.y, frame.size.width/4, frame.size.height/2)];
+    _backButton = [[UIButton alloc] initWithFrame:CGRectMake(frame.origin.x,
+                                                             frame.origin.y,
+                                                             frame.size.width/4,
+                                                             frame.size.height/2)];
     [_backButton setTitle:@"< Back" forState:UIControlStateNormal];
     [_backButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [_backButton setContentVerticalAlignment:UIControlContentVerticalAlignmentCenter];
-    [_backButton setContentHorizontalAlignment:(UIControlContentHorizontalAlignmentCenter)];
+    [_backButton setContentHorizontalAlignment:(UIControlContentHorizontalAlignmentLeft)];
     [_backButton addTarget:self action:@selector(backButtonDidTap:) forControlEvents:UIControlEventTouchDown];
     [self.view addSubview:_backButton];
+    
+    _nextGameButton = [[UIButton alloc] initWithFrame:CGRectMake(frame.origin.x + frame.size.width/2,
+                                                                 frame.origin.y,
+                                                                 frame.size.width/2,
+                                                                 frame.size.height/2)];
+    [_nextGameButton setTitle:@"NewGame >" forState:UIControlStateNormal];
+    [_nextGameButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [_nextGameButton setContentVerticalAlignment:UIControlContentVerticalAlignmentCenter];
+    [_nextGameButton setContentHorizontalAlignment:(UIControlContentHorizontalAlignmentRight)];
+    [_nextGameButton addTarget:self action:@selector(nextGameButtonDidTap:) forControlEvents:UIControlEventTouchDown];
+    [self.view addSubview:_nextGameButton];
     
     
     _commandLabel = [[UILabel alloc] initWithFrame:CGRectMake(frame.origin.x,
@@ -212,6 +227,10 @@
 
 - (void)backButtonDidTap:(id)sender {
     [_game didPressBackButton];
+}
+
+- (void)nextGameButtonDidTap:(id)sender {
+    [_game startNewGame];
 }
 
 - (void)loadGameBoardInFrame:(CGRect)frame {

@@ -27,23 +27,17 @@
 }
 
 - (nullable Player *)turn {
-    NSUInteger tag = [self generateRandomNumberWithlowerBound:[_player1 tag] upperBound:[_player2 tag]];
-    if (tag == [_player1 tag]) {
+    if ([self coinToss]) {
         return _player1;
     }
-    else if (tag == [_player2 tag]) {
-        return _player2;
-    }
     else {
-        return nil;
+        return _player2;
     }
 }
 
-- (NSUInteger)generateRandomNumberWithlowerBound:(NSUInteger)lowerBound
-                               upperBound:(NSUInteger)upperBound
+- (BOOL)coinToss
 {
-    NSUInteger rndValue = lowerBound + arc4random() % (upperBound - lowerBound);
-    return rndValue;
+    return arc4random() % 2;
 }
 
 - (NSUInteger)bestMoveForPlayer:(nonnull Player *)player onGameBoard:(nonnull GameBoard *)board {
