@@ -9,10 +9,13 @@
 #import "GameBoard.h"
 
 const NSUInteger kNumTiles = 9;
-const NSString *kPosKey = @"Pos";
-const NSString *kPlayerKey = @"Player";
+NSString * const kGameTilePosKey = @"Pos";
+NSString * const kGameTilePlayerKey = @"Player";
 
 @interface GameBoard()
+
+@property (nonatomic, strong, nullable) NSMutableArray<Player *> *tiles;
+@property (nonatomic, strong, nullable) NSMutableArray *moves;
 
 @property (nonatomic, strong, nonnull) Player *playerNone;
 @property (nonatomic, strong, nonnull) Player *player1;
@@ -52,11 +55,23 @@ const NSString *kPlayerKey = @"Player";
     }
     else {
         _tiles[pos] = player;
-        [_moves addObject:@{kPosKey:[NSNumber numberWithUnsignedInteger:pos], kPlayerKey:player}];
+        [_moves addObject:@{kGameTilePosKey:[NSNumber numberWithUnsignedInteger:pos], kGameTilePlayerKey:player}];
         return TRUE;
     }
     
     return FALSE;
+}
+
+- (NSDictionary *)undoLastMove {
+    if (_moves.count) {
+        NSDictionary *lastMoveDict = [_moves lastObject];
+        [_moves removeLastObject];
+        NSNumber *lastMove = [lastMoveDict objectForKey:kGameTilePosKey];
+        [_tiles replaceObjectAtIndex:[lastMove unsignedIntegerValue] withObject:_playerNone];
+        return lastMoveDict;
+    }
+    
+    return nil;
 }
 
 - (BOOL)isGameOver {

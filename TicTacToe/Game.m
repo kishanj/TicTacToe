@@ -39,6 +39,8 @@
 }
 
 - (void)startNewGame {
+    [_gameView resetGame];
+    
     _board = [[GameBoard alloc] initGameWithPlayerNone:_playerNone andPlayer1:_player1 andPlayer2:_player2];
     Player *player = [_mode turn];
     NSUInteger tile = [_mode bestMoveForPlayer:player onGameBoard:_board];
@@ -74,7 +76,13 @@
 }
 
 - (void)didPressBackButton {
-    
+    NSDictionary *lastMoveDict = [_board undoLastMove];
+    if (lastMoveDict) {
+        Player *lastPlayerToPlay = [lastMoveDict objectForKey:kGameTilePlayerKey];
+        NSNumber *lastMove = [lastMoveDict objectForKey:kGameTilePosKey];
+        [_gameView assignTile:[lastMove unsignedIntegerValue] toPlayer:nil];
+        [_gameView assignTurn:lastPlayerToPlay];
+    }
 }
 
 @end

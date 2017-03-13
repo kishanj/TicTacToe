@@ -9,10 +9,11 @@
 #import <Foundation/Foundation.h>
 #import "Player.h"
 
-@interface GameBoard : NSObject
+extern const NSUInteger kNumTiles;
+extern NSString * _Nonnull const kGameTilePosKey;
+extern NSString * _Nonnull const kGameTilePlayerKey;
 
-@property (nonatomic, strong, nonnull) NSMutableArray<Player *> *tiles;
-@property (nonatomic, strong, nullable) NSMutableArray *moves;
+@interface GameBoard : NSObject
 
 + (NSUInteger)tilesOnBoard;
 
@@ -20,5 +21,6 @@
 - (BOOL)makeMoveByPlayer:(nonnull Player *)player move:(NSUInteger)pos;
 - (BOOL)isGameOver;
 - (nullable Player *)whoWonGame;
+- (nullable NSDictionary *)undoLastMove;
 
 @end

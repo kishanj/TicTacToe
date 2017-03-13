@@ -19,6 +19,7 @@
 
 @property (strong, nonatomic) NSMutableArray *tiles;
 @property (strong, nonatomic, nullable) Player *turn;
+@property BOOL gameOver;
 
 @property (strong, nonatomic) UIImage *player1Image;
 @property (strong, nonatomic) UIColor *player1Color;
@@ -210,7 +211,7 @@
 }
 
 - (void)backButtonDidTap:(id)sender {
-    
+    [_game didPressBackButton];
 }
 
 - (void)loadGameBoardInFrame:(CGRect)frame {
@@ -298,7 +299,7 @@
 
 - (void)boardTileDidTap:(UITapGestureRecognizer *)sender
 {
-    if (sender.state == UIGestureRecognizerStateEnded)
+    if (sender.state == UIGestureRecognizerStateEnded && !_gameOver)
     {
         [_game player:_turn didMove:[[sender view] tag]];
     }
@@ -307,52 +308,51 @@
 #pragma mark - GameViewInterface implementation
 
 - (void)resetGame {
-    for (NSInteger i=0; i<_tiles.count; i++) {
-        UIImageView *tile = _tiles[i];
-        [tile setImage:nil];
-        [tile setUserInteractionEnabled:YES];
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        _gameOver = NO;
+        for (NSInteger i=0; i<_tiles.count; i++) {
+            UIImageView *tile = _tiles[i];
+            [tile setImage:nil];
+            [tile setUserInteractionEnabled:YES];
+        }
+    });
 }
 
 - (void)assignTile:(NSUInteger)tag toPlayer:(nullable Player *)player {
-    if (tag < _tiles.count) {
-        UIImageView *tile = _tiles[tag];
-        [tile setImage:[player image]];
-        [tile setTintColor:[player color]];
-        if (player) {
-            [tile setUserInteractionEnabled:NO];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (tag < _tiles.count) {
+            UIImageView *tile = _tiles[tag];
+            [tile setImage:[player image]];
+            [tile setTintColor:[player color]];
+            [tile setUserInteractionEnabled:(player ? NO : YES)];
         }
-        else {
-            [tile setUserInteractionEnabled:YES];
-        }
-    }
+    });
 }
 
 - (void)resetStats {
-    [_player1ScoreLabel setText:0];
-    [_player2ScoreLabel setText:0];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [_player1ScoreLabel setText:0];
+        [_player2ScoreLabel setText:0];
+    });
 }
 
 - (void)assignTurn:(nullable Player *)player {
-    _turn = player;
     dispatch_async(dispatch_get_main_queue(), ^{
+        _gameOver = NO;
+        _turn = player;
         [_commandLabel setText:[NSString stringWithFormat:@"It is %@'s turn", [player name]]];
     });
 }
 
 - (void)assignWinner:(nullable Player *)winner {
-    
     dispatch_async(dispatch_get_main_queue(), ^{
+        _gameOver = YES;
         if (winner) {
             [_commandLabel setText:[NSString stringWithFormat:@"%@ WON!", [winner name]]];
             
         }
         else {
             [_commandLabel setText:[NSString stringWithFormat:@"It is a DRAW"]];
-        }
-        
-        for (NSInteger i=0; i<_tiles.count; i++) {
-            [_tiles[i] setUserInteractionEnabled:NO];
         }
     });
 }
