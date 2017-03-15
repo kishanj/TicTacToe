@@ -175,7 +175,7 @@
                                                                      player1ScoreCenter.y - playerObjectSize.height/2,
                                                                      playerObjectSize.width,
                                                                      playerObjectSize.height)];
-    [_player1ScoreLabel setText:@"1"];
+    [_player1ScoreLabel setText:@"0"];
     [_player1ScoreLabel setTextColor:[UIColor blackColor]];
     [_player1ScoreLabel setTextAlignment:NSTextAlignmentCenter];
     [self.view addSubview:_player1ScoreLabel];
@@ -185,7 +185,7 @@
                                                                    player2ScoreCenter.y - playerObjectSize.height/2,
                                                                    playerObjectSize.width,
                                                                    playerObjectSize.height)];
-    [_player2ScoreLabel setText:@"2"];
+    [_player2ScoreLabel setText:@"0"];
     [_player2ScoreLabel setTextColor:[UIColor blackColor]];
     [_player2ScoreLabel setTextAlignment:NSTextAlignmentCenter];
     [self.view addSubview:_player2ScoreLabel];

@@ -24,13 +24,15 @@
         
         _player1 = [[Player alloc] initWithName:@"Alice"
                                                 andTag:1
-                                              andImage:[[UIImage imageNamed:@"Hearts"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]
-                                              andColor:[UIColor redColor]];
+                                              andImage:[[UIImage imageNamed:@"Spades"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]
+                                              andColor:[UIColor blueColor]
+                                        andType:PlayerTypeUser];
         
         _player2 = [[Player alloc] initWithName:@"Bob"
                                                 andTag:2
-                                              andImage:[[UIImage imageNamed:@"Spades"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]
-                                              andColor:[UIColor blueColor]];
+                                              andImage:[[UIImage imageNamed:@"Hearts"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]
+                                              andColor:[UIColor redColor]
+                                        andType:PlayerTypeUser];
         
         _mode = [[GameModeManual alloc] initWithPlayer1:_player1 andPlayer2:_player2];
     }
@@ -43,15 +45,14 @@
     
     _board = [[GameBoard alloc] initGameWithPlayerNone:_playerNone andPlayer1:_player1 andPlayer2:_player2];
     Player *player = [_mode turn];
-    NSUInteger tile = [_mode bestMoveForPlayer:player onGameBoard:_board];
-    if (tile == NSUIntegerMax) {
-        [_gameView assignTurn:player];
-    }
-    else {
+    if ([player type] == PlayerTypeComputer) {
+        NSUInteger tile = [_mode bestMoveForPlayer:player onGameBoard:_board];
         [_gameView assignTile:tile toPlayer:player];
         [_gameView assignTurn:[self nextPlayer:player]];
     }
-    
+    else {
+        [_gameView assignTurn:player];
+    }    
 }
 
 - (void)player:(Player *)player didMove:(NSUInteger)pos {

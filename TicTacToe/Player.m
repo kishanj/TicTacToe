@@ -10,11 +10,12 @@
 
 @implementation Player
 
-- (id)initWithName:(NSString *)name andTag:(NSUInteger)tag andImage:(UIImage *)image andColor:(UIColor *)color {
+- (id)initWithName:(NSString *)name andTag:(NSUInteger)tag andImage:(UIImage *)image andColor:(UIColor *)color andType:(PlayerType)type {
     _name = name;
     _tag = tag;
     _image = image;
     _color = color;
+    _type = type;
     return self;
 }
 
