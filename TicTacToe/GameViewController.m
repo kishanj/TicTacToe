@@ -20,7 +20,7 @@
 
 @property (strong, nonatomic) NSMutableArray *tiles;
 @property (strong, nonatomic, nullable) Player *turn;
-@property BOOL gameOver;
+@property BOOL editableBoard;
 
 @property (strong, nonatomic) UIImage *player1Image;
 @property (strong, nonatomic) UIColor *player1Color;
@@ -318,7 +318,7 @@
 
 - (void)boardTileDidTap:(UITapGestureRecognizer *)sender
 {
-    if (sender.state == UIGestureRecognizerStateEnded && !_gameOver)
+    if (sender.state == UIGestureRecognizerStateEnded && _editableBoard)
     {
         [_game player:_turn didMove:[[sender view] tag]];
     }
@@ -328,7 +328,7 @@
 
 - (void)resetGame {
     dispatch_async(dispatch_get_main_queue(), ^{
-        _gameOver = NO;
+        _editableBoard = YES;
         for (NSInteger i=0; i<_tiles.count; i++) {
             UIImageView *tile = _tiles[i];
             [tile setImage:nil];
@@ -357,7 +357,7 @@
 
 - (void)assignTurn:(nullable Player *)player {
     dispatch_async(dispatch_get_main_queue(), ^{
-        _gameOver = NO;
+        _editableBoard = ([player type] == PlayerTypeUser);
         _turn = player;
         [_commandLabel setText:[NSString stringWithFormat:@"It is %@'s turn", [player name]]];
     });
@@ -365,7 +365,7 @@
 
 - (void)assignWinner:(nullable Player *)winner {
     dispatch_async(dispatch_get_main_queue(), ^{
-        _gameOver = YES;
+        _editableBoard = NO;
         if (winner) {
             [_commandLabel setText:[NSString stringWithFormat:@"%@ WON!", [winner name]]];
             

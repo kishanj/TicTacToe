@@ -10,6 +10,7 @@
 #import "Player.h"
 #import "GameBoard.h"
 #import "GameModeManual.h"
+#import "GameModeBeginner.h"
 
 @class GameViewController;
 

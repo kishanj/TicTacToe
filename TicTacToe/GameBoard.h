@@ -22,5 +22,6 @@ extern NSString * _Nonnull const kGameTilePlayerKey;
 - (BOOL)isGameOver;
 - (nullable Player *)whoWonGame;
 - (nullable NSDictionary *)undoLastMove;
+- (nullable NSArray *)vacantTiles;
 
 @end

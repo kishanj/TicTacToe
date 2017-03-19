@@ -111,4 +111,15 @@ NSString * const kGameTilePlayerKey = @"Player";
     return FALSE;
 }
 
+- (nullable NSArray *)vacantTiles {
+    NSMutableArray *vacantTiles = [[NSMutableArray alloc] initWithCapacity:kNumTiles];
+    for(NSInteger i=0; i<kNumTiles; i++) {
+        if (_tiles[i] == _playerNone) {
+            [vacantTiles addObject:[NSNumber numberWithInteger:i]];
+        }
+    }
+    
+    return vacantTiles;
+}
+
 @end

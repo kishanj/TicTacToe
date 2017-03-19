@@ -22,19 +22,19 @@
         _gameView = gameView;
         _playerNone = [[Player alloc] init];
         
-        _player1 = [[Player alloc] initWithName:@"Alice"
+        _player1 = [[Player alloc] initWithName:@"User"
                                                 andTag:1
                                               andImage:[[UIImage imageNamed:@"Spades"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]
                                               andColor:[UIColor blueColor]
                                         andType:PlayerTypeUser];
         
-        _player2 = [[Player alloc] initWithName:@"Bob"
+        _player2 = [[Player alloc] initWithName:@"Computer"
                                                 andTag:2
                                               andImage:[[UIImage imageNamed:@"Hearts"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]
                                               andColor:[UIColor redColor]
-                                        andType:PlayerTypeUser];
+                                        andType:PlayerTypeComputer];
         
-        _mode = [[GameModeManual alloc] initWithPlayer1:_player1 andPlayer2:_player2];
+        _mode = [[GameModeBeginner alloc] initWithPlayer1:_player1 andPlayer2:_player2];
     }
     
     return self;
@@ -45,25 +45,18 @@
     
     _board = [[GameBoard alloc] initGameWithPlayerNone:_playerNone andPlayer1:_player1 andPlayer2:_player2];
     Player *player = [_mode turn];
+    
     if ([player type] == PlayerTypeComputer) {
-        NSUInteger tile = [_mode bestMoveForPlayer:player onGameBoard:_board];
-        [_gameView assignTile:tile toPlayer:player];
-        [_gameView assignTurn:[self nextPlayer:player]];
+        [self makeComputerMoveForPlayer:player];
     }
     else {
         [_gameView assignTurn:player];
-    }    
+    }
 }
 
 - (void)player:(Player *)player didMove:(NSUInteger)pos {
     if ([_board makeMoveByPlayer:player move:pos]) {
-        [_gameView assignTile:pos toPlayer:player];
-        if ([_board isGameOver]) {
-            [_gameView assignWinner:[_board whoWonGame]];
-        }
-        else {
-            [_gameView assignTurn:[self nextPlayer:player]];
-        }
+        [self handleMoveToTile:pos byPlayer:player];
     }
 }
 
@@ -82,7 +75,35 @@
         Player *lastPlayerToPlay = [lastMoveDict objectForKey:kGameTilePlayerKey];
         NSNumber *lastMove = [lastMoveDict objectForKey:kGameTilePosKey];
         [_gameView assignTile:[lastMove unsignedIntegerValue] toPlayer:nil];
-        [_gameView assignTurn:lastPlayerToPlay];
+        if ([lastPlayerToPlay type] == PlayerTypeComputer) {
+            [self makeComputerMoveForPlayer:lastPlayerToPlay];
+        }
+        else {
+            [_gameView assignTurn:lastPlayerToPlay];
+        }
+    }
+}
+
+- (void)makeComputerMoveForPlayer:(Player *)player {
+    [_gameView assignTurn:player];
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        NSUInteger tile = [_mode bestMoveForPlayer:player onGameBoard:_board];
+        [self handleMoveToTile:tile byPlayer:player];
+        [_gameView assignTurn:[self nextPlayer:player]];
+    });
+}
+
+- (void)handleMoveToTile:(NSUInteger)pos byPlayer:(Player *)player {
+    [_gameView assignTile:pos toPlayer:player];
+    if ([_board isGameOver]) {
+        [_gameView assignWinner:[_board whoWonGame]];
+    }
+    else {
+        Player *nextPlayer = [self nextPlayer:player];
+        if ([nextPlayer type] == PlayerTypeComputer) {
+            [self makeComputerMoveForPlayer:nextPlayer];
+        }
     }
 }
 

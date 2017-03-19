@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		984711781E7B46AC00CAB257 /* GameModeBeginner.m in Sources */ = {isa = PBXBuildFile; fileRef = 984711771E7B46AC00CAB257 /* GameModeBeginner.m */; };
 		987415621E6F7C8C006EB120 /* Player.m in Sources */ = {isa = PBXBuildFile; fileRef = 987415611E6F7C8C006EB120 /* Player.m */; };
 		987415641E6F838E006EB120 /* Game.m in Sources */ = {isa = PBXBuildFile; fileRef = 987415631E6F838E006EB120 /* Game.m */; };
 		987415691E70835A006EB120 /* GameBoard.m in Sources */ = {isa = PBXBuildFile; fileRef = 987415681E70835A006EB120 /* GameBoard.m */; };
@@ -40,6 +41,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		984711771E7B46AC00CAB257 /* GameModeBeginner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameModeBeginner.m; sourceTree = "<group>"; };
+		984711791E7B46C800CAB257 /* GameModeBeginner.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameModeBeginner.h; sourceTree = "<group>"; };
 		987415601E6F7A04006EB120 /* Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Player.h; sourceTree = "<group>"; };
 		987415611E6F7C8C006EB120 /* Player.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Player.m; sourceTree = "<group>"; };
 		987415631E6F838E006EB120 /* Game.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Game.m; sourceTree = "<group>"; };
@@ -130,6 +133,8 @@
 				9874156D1E70CEC6006EB120 /* GameMode.m */,
 				987415661E707ECA006EB120 /* GameModeManual.h */,
 				9874156A1E70C4F7006EB120 /* GameModeManual.m */,
+				984711791E7B46C800CAB257 /* GameModeBeginner.h */,
+				984711771E7B46AC00CAB257 /* GameModeBeginner.m */,
 				987415671E70806E006EB120 /* GameBoard.h */,
 				987415681E70835A006EB120 /* GameBoard.m */,
 				98D3C22A1E69FBCE00BAE214 /* Main.storyboard */,
@@ -300,6 +305,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				984711781E7B46AC00CAB257 /* GameModeBeginner.m in Sources */,
 				987415641E6F838E006EB120 /* Game.m in Sources */,
 				987415621E6F7C8C006EB120 /* Player.m in Sources */,
 				9874156B1E70C4F7006EB120 /* GameModeManual.m in Sources */,
