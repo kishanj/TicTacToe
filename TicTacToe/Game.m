@@ -12,6 +12,7 @@
 @interface Game()
 
 @property (nonatomic, weak) GameViewController *gameView;
+@property dispatch_block_t scheduledComputerMove;
 
 @end
 
@@ -55,9 +56,7 @@
 }
 
 - (void)player:(Player *)player didMove:(NSUInteger)pos {
-    if ([_board makeMoveByPlayer:player move:pos]) {
-        [self handleMoveToTile:pos byPlayer:player];
-    }
+    [self handleMoveToTile:pos byPlayer:player];
 }
 
 - (Player *)nextPlayer:(Player *)currentPlayer {
@@ -70,6 +69,8 @@
 }
 
 - (void)didPressBackButton {
+    [self cancelScheduledComputerMove];
+    
     NSDictionary *lastMoveDict = [_board undoLastMove];
     if (lastMoveDict) {
         Player *lastPlayerToPlay = [lastMoveDict objectForKey:kGameTilePlayerKey];
@@ -87,23 +88,40 @@
 - (void)makeComputerMoveForPlayer:(Player *)player {
     [_gameView assignTurn:player];
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    [self cancelScheduledComputerMove];
+    _scheduledComputerMove = dispatch_block_create(DISPATCH_BLOCK_ASSIGN_CURRENT, ^{
         NSUInteger tile = [_mode bestMoveForPlayer:player onGameBoard:_board];
         [self handleMoveToTile:tile byPlayer:player];
-        [_gameView assignTurn:[self nextPlayer:player]];
     });
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW,
+                                 (int64_t)(1 * NSEC_PER_SEC)),
+                   dispatch_get_main_queue(),
+                   _scheduledComputerMove);
 }
 
 - (void)handleMoveToTile:(NSUInteger)pos byPlayer:(Player *)player {
-    [_gameView assignTile:pos toPlayer:player];
-    if ([_board isGameOver]) {
-        [_gameView assignWinner:[_board whoWonGame]];
-    }
-    else {
-        Player *nextPlayer = [self nextPlayer:player];
-        if ([nextPlayer type] == PlayerTypeComputer) {
-            [self makeComputerMoveForPlayer:nextPlayer];
+    if ([_board makeMoveByPlayer:player move:pos]) {
+        [_gameView assignTile:pos toPlayer:player];
+        if ([_board isGameOver]) {
+            [_gameView assignWinner:[_board whoWonGame]];
         }
+        else {
+            Player *nextPlayer = [self nextPlayer:player];
+            if ([nextPlayer type] == PlayerTypeComputer) {
+                [self makeComputerMoveForPlayer:nextPlayer];
+            }
+            else {
+                [_gameView assignTurn:nextPlayer];
+            }
+        }
+    }
+}
+
+- (void)cancelScheduledComputerMove {
+    if (_scheduledComputerMove) {
+        dispatch_block_cancel(_scheduledComputerMove);
+        _scheduledComputerMove = NULL;
     }
 }
 
